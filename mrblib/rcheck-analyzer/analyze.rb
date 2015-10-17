@@ -16,7 +16,7 @@ module RcheckAnalyzer
         @multi_keys = (@key2.nil?) ? false : true
         @log = "/proc/self/fd/0" if @log == "stdin" or @log == "self"
       rescue => e
-        raise ArgumentError, "invalid argument (#{e})\n#{Error::USAGE}"
+        raise ArgumentError, "invalid argument\n#{Error::USAGE}"
       end
     end
 

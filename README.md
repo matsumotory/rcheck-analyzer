@@ -61,7 +61,7 @@ $ ./rcheck-analyzer /usr/local/apache/logs/resource.log 100 filename status
  [[200, 1]]]
 ```
 
- ### sum option
+### sum option
  
  ```
  $ ./rcheck-analyzer /usr/local/apache/logs/resource.log 1000 hostname result.RCheckUCPU sum

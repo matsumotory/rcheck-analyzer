@@ -33,6 +33,16 @@ $ ./rcheck-analyzer /usr/local/apache/logs/resource.log 100 hostname status
 ```
 
 ```
+$ ./rcheck-analyzer /usr/local/apache/logs/resource.log 100 status hostname
+[403, [["blog.matsumoto-r.jp", 2]]]
+[200, [["blog.matsumoto-r.jp", 79], ["moblog.matsumoto-r.jp", 6]]]
+[302, [["blog.matsumoto-r.jp", 1]]]
+[301, [["moblog.matsumoto-r.jp", 7], ["blog.matsumoto-r.jp", 1]]]
+[404, [["blog.matsumoto-r.jp", 3]]]
+[500, [["blog.matsumoto-r.jp", 2]]]
+```
+
+```
 $ ./rcheck-analyzer /usr/local/apache/logs/resource.log 100 filename status
 ["/usr/local/apache/htdocs/blog/index.php", [[200, 69], [301, 2]]]
 ["/usr/local/apache/htdocs/blog/wordpress", [[404, 3]]]

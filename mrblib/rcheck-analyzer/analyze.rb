@@ -5,6 +5,10 @@ module RcheckAnalyzer
     File.open(log, "r") do |file|
       Tail.new(file).each do |line|
         data << JSON.parse(line)
+        if key1 == "keys"
+          pp data[0].keys
+          return
+        end
         break if data.size > total_line
       end
     end
@@ -23,7 +27,7 @@ module RcheckAnalyzer
     if key2.nil?
       analyze.sort_by {|k, v| v }.each {|a| puts a }
     else
-      analyze.each {|k, v| puts "#{k} #{v}" }
+      analyze.each {|k, v| puts [k, v] }
     end
   end
 end

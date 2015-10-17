@@ -7,13 +7,45 @@ rcheck-analyzer analyze the log via [mod_resource_checker](https://github.com/ma
 ## usage
 
 ```
-./rcheck-analyzer log-filenam read-tail-line key1 (key2) (sum)
+./rcheck-analyzer log-filename read-tail-line key1 (key2) (sum)
 
+ - read-head-line is the number of file-tail-line. `0` read all lines.
  - key1 and key2 are json keys. key2 is optional argument.
  - sum is only used by using key2 option. sum option sum the target json value.
 ```
+
+```
+$ ./rcheck-analyzer resource.log 100 hostname status
+["wiki.matsumoto-r.jp", [[200, 4], [302, 1]]]
+["blog.matsumoto-r.jp", [[200, 63], [404, 4], [500, 2], [301, 1]]]
+["moblog.matsumoto-r.jp", [[404, 15], [301, 6], [200, 5]]]
+```
+
+```
+$ ./rcheck-analyzer resource.log 100 hostname result.rcheckucpu sum
+["wiki.matsumoto-r.jp", [["rcheckucpu", 0.041994]]]
+["blog.matsumoto-r.jp", [["rcheckucpu", 16.506491]]]
+["moblog.matsumoto-r.jp", [["rcheckucpu", 5.637144]]]
+```
+
+- stdin mode
+
+```
+echo log-data | ./rcheck-analyzer stdin read-head-line key1 (key2) (sum)
+
+  - you set `stdin` instead of `log-filename`
+  - read-head-line is the number of file-head-line. `0` read all lines.
+```
+
+```
+$ grep "Sat Oct 17 21" resource.log | ./rcheck-analyzer stdin 0 hostname
+["blog.matsumoto-r.jp", 313]
+["moblog.matsumoto-r.jp", 139]
+["wiki.matsumoto-r.jp", 5]
+```
+
  
-## exmaple
+## more exmaple
 ```
 $ ./rcheck-analyzer /var/log/httpd/resource.log 1000 status
 [404, 31]

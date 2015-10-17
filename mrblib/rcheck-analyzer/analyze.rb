@@ -27,7 +27,7 @@ module RcheckAnalyzer
             pp data[0]
             return nil
           end
-          break if data.size > @total_line
+          break if @total_line != 0 and data.size > @total_line
         end
       end
       data

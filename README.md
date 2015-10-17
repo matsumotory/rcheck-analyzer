@@ -15,6 +15,13 @@ rcheck-analyzer analyze the log via [mod_resource_checker](https://github.com/ma
 ```
 
 ```
+$ ./rcheck-analyzer resource.log 100 hostname 
+["blog.matsumoto-r.jp", 70]
+["moblog.matsumoto-r.jp", 26]
+["wiki.matsumoto-r.jp", 5]
+```
+
+```
 $ ./rcheck-analyzer resource.log 100 hostname status
 ["wiki.matsumoto-r.jp", [[200, 4], [302, 1]]]
 ["blog.matsumoto-r.jp", [[200, 63], [404, 4], [500, 2], [301, 1]]]

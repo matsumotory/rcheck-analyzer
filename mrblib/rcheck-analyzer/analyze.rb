@@ -1,22 +1,29 @@
 module RcheckAnalyzer
+  RUN_FILENAME = File.expand_path(File.dirname(__FILE__))
   class Analyze
-    def initialize log, total_line, key1, key2=nil, type="count"
-      @log = log
-      @total_line = total_line
+    def initialize argv
+      @log = argv[1]
+      @total_line = argv[2].to_i
       begin
-        @key1 = key1.downcase
-        @key2 = (key2.nil?) ? key2 : key2.downcase
-        @type = (type.nil?) ? type : type.downcase
+        @key1 = argv[3].downcase
+        @key2 = (argv[4].nil?) ? argv[4] : argv[4].downcase
+        @type = (argv[5].nil?) ? argv[5] : argv[5].downcase
         if @type == "sum"
           if (@key2_ary = @key2.split(".")).size != 2
             @key2_ary = nil
           end
         end
-        @multi_keys = (key2.nil?) ? false : true
+        @multi_keys = (@key2.nil?) ? false : true
         @log = "/proc/self/fd/0" if @log == "stdin" or @log == "self"
       rescue => e
-        raise ArgumentError, "invalid argument (#{e})"
+        raise ArgumentError, "invalid argument (#{e})\n#{Error::USAGE}"
       end
+    end
+
+    def run
+      data = Data.data_from_log @log, @key1, @total_line
+      result = analyze_data data
+      Message.output_result result, @multi_keys
     end
 
     def analyze_data data
@@ -42,12 +49,6 @@ module RcheckAnalyzer
         end
       end
       analyze
-    end
-
-    def run
-      data = Data.data_from_log @log, @key1, @total_line
-      result = analyze_data data
-      Message.output_result result, @multi_keys
     end
   end
 end

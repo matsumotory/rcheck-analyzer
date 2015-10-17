@@ -1,5 +1,8 @@
 # rcheck-analyzer
 
+rcheck-analyzer analyze the log via [mod_resource_checker](https://github.com/matsumoto-r/mod_resource_checker).
+
+ It's simple and powerful.
 
 ```
 $ ./rcheck-analyzer /var/log/httpd/resource.log 1000 status

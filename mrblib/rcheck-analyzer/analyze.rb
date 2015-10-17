@@ -1,5 +1,5 @@
 module RcheckAnalyzer
-  def self.run log, total_line, key
+  def self.run log, total_line, key1, key2=nil
     data = []
     analyze = {}
     File.open(log, "r") do |file|
@@ -9,9 +9,21 @@ module RcheckAnalyzer
       end
     end
     data.each do |d|
-      analyze[d[key]] = 0 if analyze[d[key]].nil?
-      analyze[d[key]] += 1
+      unless key2.nil?
+        if analyze[d[key1]].nil?
+          analyze[d[key1]] = {}
+        end
+        analyze[d[key1]][d[key2]] = 0 if analyze[d[key1]][d[key2]].nil?
+        analyze[d[key1]][d[key2]] += 1
+      else
+        analyze[d[key1]] = 0 if analyze[d[key1]].nil?
+        analyze[d[key1]] += 1
+      end
     end
-    analyze.sort_by {|k, v| v }.each { |a| puts a }
+    if key2.nil?
+      analyze.sort_by {|k, v| v }.each {|a| puts a }
+    else
+      analyze.each {|k, v| puts "#{k} #{v}" }
+    end
   end
 end

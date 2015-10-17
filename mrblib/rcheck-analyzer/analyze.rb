@@ -2,8 +2,14 @@ module RcheckAnalyzer
   def self.run log, total_line, key1, key2=nil, type="count"
     data = []
     analyze = {}
+    log = "/proc/self/fd/0" if log == "stdin"
     File.open(log, "r") do |file|
-      Tail.new(file).each do |line|
+      unless log == "/proc/self/fd/0"
+        fp = Tail.new file
+      else
+        fp = file
+      end
+      fp.each do |line|
         data << JSON.parse(line)
         if key1 == "keys"
           pp data[0]

@@ -3,7 +3,17 @@
 rcheck-analyzer analyze the log via [mod_resource_checker](https://github.com/matsumoto-r/mod_resource_checker).
 
  It's simple and powerful.
+ 
+## usage
 
+```
+./rcheck-analyzer log-filenam read-tail-line key1 (key2) (sum)
+
+ - key1 and key2 are json keys. key2 is optional argument.
+ - sum is only used by using key2 option. sum option sum the target json value.
+```
+ 
+## exmaple
 ```
 $ ./rcheck-analyzer /var/log/httpd/resource.log 1000 status
 [404, 31]
@@ -67,18 +77,18 @@ $ ./rcheck-analyzer /usr/local/apache/logs/resource.log 100 filename status
 ### sum option
  
  ```
- $ ./rcheck-analyzer /usr/local/apache/logs/resource.log 1000 hostname result.RCheckUCPU sum
-["moblog.matsumoto-r.jp", [["RCheckUCPU", 24.030345]]]
-["blog.matsumoto-r.jp", [["RCheckUCPU", 238.290761]]]
-["wiki.matsumoto-r.jp", [["RCheckUCPU", 0.043993]]]
+ $ ./rcheck-analyzer /usr/local/apache/logs/resource.log 1000 hostname result.rcheckucpu sum
+["moblog.matsumoto-r.jp", [["rcheckucpu", 24.030345]]]
+["blog.matsumoto-r.jp", [["rcheckucpu", 238.290761]]]
+["wiki.matsumoto-r.jp", [["rcheckucpu", 0.043993]]]
 ```
 
 ```
-$ ./rcheck-analyzer /usr/local/apache/logs/resource.log 10 filename result.RCheckUCPU sum
-["/usr/local/apache/htdocs/blog/index.php", [["RCheckUCPU", 1.058839]]]
-["/usr/local/apache/htdocs/moblog/index.php", [["RCheckUCPU", 0.885865]]]
+$ ./rcheck-analyzer /usr/local/apache/logs/resource.log 10 filename result.rcheckucpu sum
+["/usr/local/apache/htdocs/blog/index.php", [["rcheckucpu", 1.058839]]]
+["/usr/local/apache/htdocs/moblog/index.php", [["rcheckucpu", 0.885865]]]
 ["/usr/local/apache/htdocs/blog/wp-admin/admin-ajax.php",
- [["RCheckUCPU", 0.377943]]]
+ [["rcheckucpu", 0.377943]]]
 ```
 
 ## use stdin
@@ -105,25 +115,25 @@ can use other keys like the following log key:
 ```
 $ ./rcheck-analyzer /usr/local/apache/logs/resource.log 10 keys
 {"module"=>"mod_resource_checker",
- "date"=>"Sat Oct 17 17:28:35 2015",
- "type"=>"RCheckALL",
+ "date"=>"sat oct 17 21:35:44 2015",
+ "type"=>"rcheckall",
  "unit"=>nil,
  "location"=>"/",
- "remote_ip"=>"127.0.0.1",
- "filename"=>
-  "/usr/local/apache/htdocs/blog/wp-content/uploads/2009/07/IMG_33491.JPG",
+ "remote_ip"=>"93.159.230.89",
+ "filename"=>"/usr/local/apache/htdocs/wiki/lib/exe/js.php",
  "scheme"=>"http",
- "method"=>"GET",
- "hostname"=>"blog.matsumoto-r.jp",
+ "method"=>"get",
+ "hostname"=>"wiki.matsumoto-r.jp",
  "server_ip"=>"127.0.0.1",
- "uri"=>"/wp-content/uploads/2009/07/IMG_33491.JPG",
+ "uri"=>"/lib/exe/js.php",
  "real_server_name"=>"www.matsumoto-r.jp",
  "uid"=>2,
- "size"=>81210,
- "content_length"=>81210,
+ "size"=>12503,
+ "content_length"=>0,
  "status"=>200,
- "pid"=>20044,
+ "pid"=>20047,
  "threshold"=>nil,
  "response_time"=>0,
- "result"=>{"RCheckUCPU"=>0, "RCheckSCPU"=>0, "RCheckMEM"=>0.078125}}
+ "result"=>
+  {"rcheckucpu"=>0.007999, "rcheckscpu"=>0.003999, "rcheckmem"=>0.484375}}
 ```

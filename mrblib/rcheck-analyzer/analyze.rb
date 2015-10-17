@@ -59,7 +59,7 @@ module RcheckAnalyzer
     end
 
     def run
-      @log = "/proc/self/fd/0" if @log == "stdin"
+      @log = "/proc/self/fd/0" if @log == "stdin" or @log == "self"
 
       data = data_from_log @log
       return if data.nil?

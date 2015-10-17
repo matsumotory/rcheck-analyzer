@@ -3,34 +3,20 @@ module RcheckAnalyzer
     def initialize log, total_line, key1, key2=nil, type="count"
       @log = log
       @total_line = total_line
-      @key1 = key1.downcase
-      @key2 = (key2.nil?) ? key2 : key2.downcase
-      @type = (type.nil?) ? type : type.downcase
-      if @type == "sum"
-        if (@key2_ary = @key2.split(".")).size != 2
-          @key2_ary = nil
-        end
-      end
-    end
-
-    def data_from_log log
-      data = []
-      File.open(log, "r") do |file|
-        unless log == "/proc/self/fd/0"
-          fp = Tail.new file
-        else
-          fp = file
-        end
-        fp.each do |line|
-          data << JSON.parse(line.downcase)
-          if @key1 == "keys"
-            pp data[0]
-            return nil
+      begin
+        @key1 = key1.downcase
+        @key2 = (key2.nil?) ? key2 : key2.downcase
+        @type = (type.nil?) ? type : type.downcase
+        if @type == "sum"
+          if (@key2_ary = @key2.split(".")).size != 2
+            @key2_ary = nil
           end
-          break if @total_line != 0 and data.size > @total_line
         end
+        @multi_keys = (key2.nil?) ? false : true
+        @log = "/proc/self/fd/0" if @log == "stdin" or @log == "self"
+      rescue => e
+        raise ArgumentError, "invalid argument (#{e})"
       end
-      data
     end
 
     def analyze_data data
@@ -59,21 +45,9 @@ module RcheckAnalyzer
     end
 
     def run
-      @log = "/proc/self/fd/0" if @log == "stdin" or @log == "self"
-
-      data = data_from_log @log
-      return if data.nil?
+      data = Data.data_from_log @log, @key1, @total_line
       result = analyze_data data
-      output_result result
+      Message.output_result result, @multi_keys
     end
-
-    def output_result analyze
-      if @key2.nil?
-        analyze.sort_by {|k, v| v }.reverse.each {|a| puts a }
-      else
-        analyze.each {|k, v| pp [k, v.sort_by {|k, v| v }.reverse] }
-      end
-    end
-
   end
 end

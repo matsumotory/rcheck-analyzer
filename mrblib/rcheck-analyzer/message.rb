@@ -8,6 +8,7 @@ module RcheckAnalyzer
       else
         analyze.sort_by {|k, v| v }.reverse.each {|a| puts a }
       end
+      analyze
     end
   end
 end

@@ -22,9 +22,12 @@ module RcheckAnalyzer
 
     def run
       result = {}
+      #data = []
       Data.each_data_from_log @log, @key1, @total_line do |line|
         analyze_data_line line, result
+        #data << line
       end
+      #result = analyze_data data
       Message.output_result result, @multi_keys
     end
 

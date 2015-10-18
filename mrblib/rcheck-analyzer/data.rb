@@ -9,11 +9,12 @@ module RcheckAnalyzer
           fp = file
         end
         fp.each do |line|
-          data << JSON.parse(line.downcase)
           if key == "keys"
+            data << JSON.parse(line)
             pp data[0]
             exit 0
           end
+          data << JSON.parse(line.downcase)
           break if total_line != 0 and data.size > total_line
         end
       end

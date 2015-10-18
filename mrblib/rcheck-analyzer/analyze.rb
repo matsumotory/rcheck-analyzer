@@ -5,7 +5,7 @@ module RcheckAnalyzer
       @log = argv[1]
       @total_line = argv[2].to_i
       begin
-        @key1 = argv[3].downcase
+        @key1 = (argv[3].nil?) ? "keys" : argv[3].downcase
         @key2 = (argv[4].nil?) ? argv[4] : argv[4].downcase
         @type = (argv[5].nil?) ? argv[5] : argv[5].downcase
         if @type == "sum"

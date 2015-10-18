@@ -6,6 +6,8 @@ matrix:
   include:
     - os: linux
       sudo: 9000
+    - os: osx
+      osx_image: xcod6.4
 
 addons:
   apt:

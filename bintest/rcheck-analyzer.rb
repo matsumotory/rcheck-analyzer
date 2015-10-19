@@ -35,10 +35,16 @@ assert('keys') do
 end
 
 assert('keys - no argument') do
-  output, status = Open3.capture2(BIN_PATH, LOG_PATH)
+  output, status = Open3.capture2(BIN_PATH, LOG_PATH, "0")
 
   assert_true status.success?, "Process did not exit cleanly"
   assert_include output, KEY_OUTPUT
+end
+
+assert('total_line invelid') do
+  output, status = Open3.capture2(BIN_PATH, LOG_PATH, "hoge")
+
+  assert_false status.success?, "Process did not exit cleanly"
 end
 
 assert('hostname with one-line') do

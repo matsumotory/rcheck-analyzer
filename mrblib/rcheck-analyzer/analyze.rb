@@ -5,6 +5,8 @@ module RcheckAnalyzer
       @log = argv[1]
       @total_line = argv[2].to_i
       begin
+        raise if @log.nil?
+        raise if argv[2] != "0" and @total_line == 0
         @key1 = (argv[3].nil?) ? "keys" : argv[3].downcase
         @key2 = (argv[4].nil?) ? argv[4] : argv[4].downcase
         @type = (argv[5].nil?) ? argv[5] : argv[5].downcase

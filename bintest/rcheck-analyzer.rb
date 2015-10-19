@@ -72,14 +72,14 @@ assert('multipul keys') do
   output, status = Open3.capture2(BIN_PATH, LOG_PATH, "100", "hostname", "status")
 
   assert_true status.success?, "Process did not exit cleanly"
-  assert_include output, "[\"wiki.matsumoto-r.jp\", [[200, 4], [302, 1]]]\n[\"blog.matsumoto-r.jp\", [[200, 63], [404, 4], [500, 2], [301, 1]]]\n[\"moblog.matsumoto-r.jp\", [[404, 15], [301, 6], [200, 5]]]\n"
+  assert_include output, "[\"moblog.matsumoto-r.jp\", {200=>5, 301=>6, 404=>15}]\n[\"wiki.matsumoto-r.jp\", {200=>4, 302=>1}]\n[\"blog.matsumoto-r.jp\", {404=>4, 200=>63, 301=>1, 500=>2}]\n"
 end
 
 assert('sum with multipul keys') do
   output, status = Open3.capture2(BIN_PATH, LOG_PATH, "100", "hostname", "result.rcheckucpu", "sum")
 
   assert_true status.success?, "Process did not exit cleanly"
-  assert_include output, "[\"wiki.matsumoto-r.jp\", [[\"rcheckucpu\", 0.041994]]]\n[\"blog.matsumoto-r.jp\", [[\"rcheckucpu\", 16.506491]]]\n[\"moblog.matsumoto-r.jp\", [[\"rcheckucpu\", 5.637144]]]\n"
+  assert_include output, "[\"blog.matsumoto-r.jp\", {\"rcheckucpu\"=>16.506491}]\n[\"moblog.matsumoto-r.jp\", {\"rcheckucpu\"=>5.637144}]\n[\"wiki.matsumoto-r.jp\", {\"rcheckucpu\"=>0.041994}]\n"
 end
 
 assert('sum with multipul keys using stdin') do
@@ -87,5 +87,5 @@ assert('sum with multipul keys using stdin') do
   output, status = Open3.capture2(BIN_PATH, "stdin", "0", "hostname", "result.rcheckucpu", "sum", :stdin_data => stdin_log)
 
   assert_true status.success?, "Process did not exit cleanly"
-  assert_include output, "[\"blog.matsumoto-r.jp\", [[\"rcheckucpu\", 16.107551]]]\n[\"moblog.matsumoto-r.jp\", [[\"rcheckucpu\", 5.637144]]]\n[\"wiki.matsumoto-r.jp\", [[\"rcheckucpu\", 0.041994]]]\n"
+  assert_include output, "[\"blog.matsumoto-r.jp\", {\"rcheckucpu\"=>16.107551}]\n[\"moblog.matsumoto-r.jp\", {\"rcheckucpu\"=>5.637144}]\n[\"wiki.matsumoto-r.jp\", {\"rcheckucpu\"=>0.041994}]\n"
 end

@@ -55,6 +55,13 @@ assert('hostname') do
   assert_include output, "[\"blog.matsumoto-r.jp\", 70]\n[\"moblog.matsumoto-r.jp\", 26]\n[\"wiki.matsumoto-r.jp\", 5]\n"
 end
 
+assert('big line analyze') do
+  output, status = Open3.capture2(BIN_PATH, LOG_PATH, "0", "method")
+
+  assert_true status.success?, "Process did not exit cleanly"
+  assert_include output, "[\"get\", 64742]\n[\"post\", 61065]\n[\"options\", 32]\n[\"head\", 5]\n"
+end
+
 assert('multipul keys') do
   output, status = Open3.capture2(BIN_PATH, LOG_PATH, "100", "hostname", "status")
 

@@ -55,6 +55,13 @@ assert('hostname') do
   assert_include output, "[\"blog.matsumoto-r.jp\", 70]\n[\"moblog.matsumoto-r.jp\", 26]\n[\"wiki.matsumoto-r.jp\", 5]\n"
 end
 
+assert('big line analyze') do
+  output, status = Open3.capture2(BIN_PATH, LOG_PATH, "0", "method")
+
+  assert_true status.success?, "Process did not exit cleanly"
+  assert_include output, "[\"get\", 64742]\n[\"post\", 61065]\n[\"options\", 32]\n[\"head\", 5]\n"
+end
+
 assert('multipul keys') do
   output, status = Open3.capture2(BIN_PATH, LOG_PATH, "100", "hostname", "status")
 
@@ -69,15 +76,12 @@ assert('sum with multipul keys') do
   assert_include output, "[\"wiki.matsumoto-r.jp\", [[\"rcheckucpu\", 0.041994]]]\n[\"blog.matsumoto-r.jp\", [[\"rcheckucpu\", 16.506491]]]\n[\"moblog.matsumoto-r.jp\", [[\"rcheckucpu\", 5.637144]]]\n"
 end
 
-# TODO: support stdin on darwin
-unless RUBY_PLATFORM != "x86_64-darwin14"
-  assert('sum with multipul keys using stdin') do
-    stdin_log, status = Open3.capture2("tail", "-n", "100", LOG_PATH)
-    output, status = Open3.capture2(BIN_PATH, "stdin", "0", "hostname", "result.rcheckucpu", "sum", :stdin_data => stdin_log)
+assert('sum with multipul keys using stdin') do
+  stdin_log, status = Open3.capture2("tail", "-n", "100", LOG_PATH)
+  output, status = Open3.capture2(BIN_PATH, "stdin", "0", "hostname", "result.rcheckucpu", "sum", :stdin_data => stdin_log)
 
-    assert_true status.success?, "Process did not exit cleanly"
-    assert_include output, "[\"blog.matsumoto-r.jp\", [[\"rcheckucpu\", 16.107551]]]\n[\"moblog.matsumoto-r.jp\", [[\"rcheckucpu\", 5.637144]]]\n[\"wiki.matsumoto-r.jp\", [[\"rcheckucpu\", 0.041994]]]\n"
-  end
+  assert_true status.success?, "Process did not exit cleanly"
+  assert_include output, "[\"blog.matsumoto-r.jp\", [[\"rcheckucpu\", 16.107551]]]\n[\"moblog.matsumoto-r.jp\", [[\"rcheckucpu\", 5.637144]]]\n[\"wiki.matsumoto-r.jp\", [[\"rcheckucpu\", 0.041994]]]\n"
 end
 
 assert('version') do

@@ -14,41 +14,54 @@ module RcheckAnalyzer
           end
         end
         @multi_keys = (@key2.nil?) ? false : true
-        @log = "/proc/self/fd/0" if @log == "stdin" or @log == "self"
+        @log = Data::STDIN_FD if @log == "stdin" or @log == "self"
       rescue => e
         raise ArgumentError, "invalid argument\n#{Error::USAGE}"
       end
     end
 
     def run
-      data = Data.data_from_log @log, @key1, @total_line
-      result = analyze_data data
+      result = {}
+      #data = []
+      Data.each_data_from_log @log, @key1, @total_line do |line|
+        analyze_data_line line, result
+        #data << line
+      end
+      #result = analyze_data data
       Message.output_result result, @multi_keys
+    end
+
+    def analyze_data_line d, analyze
+      create_analyze_data d, analyze
     end
 
     def analyze_data data
       analyze = {}
       data.each do |d|
-        if @key2.nil?
-          analyze[d[@key1]] = 0 if analyze[d[@key1]].nil?
-          analyze[d[@key1]] += 1
-        else
-          analyze[d[@key1]] = {} if analyze[d[@key1]].nil?
-          if @type == "sum"
-            if @key2_ary.nil?
-              analyze[d[@key1]][@key2] = 0 if analyze[d[@key1]][@key2].nil?
-              analyze[d[@key1]][@key2] += d[@key2].to_f
-            else
-              analyze[d[@key1]][@key2_ary[1]] = 0 if analyze[d[@key1]][@key2_ary[1]].nil?
-              analyze[d[@key1]][@key2_ary[1]] += d[@key2_ary[0]][@key2_ary[1]].to_f
-            end
-          else
-            analyze[d[@key1]][d[@key2]] = 0 if analyze[d[@key1]][d[@key2]].nil?
-            analyze[d[@key1]][d[@key2]] += 1
-          end
-        end
+        create_analyze_data d, analyze
       end
       analyze
+    end
+
+    def create_analyze_data d, analyze
+      if @key2.nil?
+        analyze[d[@key1]] = 0 if analyze[d[@key1]].nil?
+        analyze[d[@key1]] += 1
+      else
+        analyze[d[@key1]] = {} if analyze[d[@key1]].nil?
+        if @type == "sum"
+          if @key2_ary.nil?
+            analyze[d[@key1]][@key2] = 0 if analyze[d[@key1]][@key2].nil?
+            analyze[d[@key1]][@key2] += d[@key2].to_f
+          else
+            analyze[d[@key1]][@key2_ary[1]] = 0 if analyze[d[@key1]][@key2_ary[1]].nil?
+            analyze[d[@key1]][@key2_ary[1]] += d[@key2_ary[0]][@key2_ary[1]].to_f
+          end
+        else
+          analyze[d[@key1]][d[@key2]] = 0 if analyze[d[@key1]][d[@key2]].nil?
+          analyze[d[@key1]][d[@key2]] += 1
+        end
+      end
     end
   end
 end

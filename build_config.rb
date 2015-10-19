@@ -13,6 +13,10 @@ MRuby::Build.new do |conf|
 
   conf.enable_bintest
   conf.enable_test
+  conf.cc do |cc|
+    cc.flags << ' -DMRB_INT64'
+  end
+
 
   gem_config(conf)
 end

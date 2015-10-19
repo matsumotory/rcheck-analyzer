@@ -1,10 +1,11 @@
 module RcheckAnalyzer
   module Data
+    STDIN_FD = "/dev/fd/0"
     def self.each_data_from_log log, key, total_line
       read_line = 0
       data_line = nil
       File.open(log, "r") do |file|
-        unless log == "/proc/self/fd/0"
+        unless log == STDIN_FD
           fp = Tail.new file
         else
           fp = file

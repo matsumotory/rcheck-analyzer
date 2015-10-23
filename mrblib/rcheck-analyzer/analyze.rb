@@ -1,5 +1,4 @@
 module RcheckAnalyzer
-  RUN_FILENAME = File.expand_path(File.dirname(__FILE__))
   class Analyze
     def initialize argv
       @log = argv[1]
@@ -18,7 +17,7 @@ module RcheckAnalyzer
         @multi_keys = (@key2.nil?) ? false : true
         @log = Data::STDIN_FD if @log == "stdin" or @log == "self"
       rescue => e
-        raise ArgumentError, "invalid argument\n#{Error::USAGE}"
+        raise ArgumentError, "invalid argument\n#{Error.usage(argv)}"
       end
     end
 

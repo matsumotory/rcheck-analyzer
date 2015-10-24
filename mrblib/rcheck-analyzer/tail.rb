@@ -1,4 +1,5 @@
 module RcheckAnalyzer
+  # ref: http://www.clear-code.com/blog/2010/6/23.html
   class Tail
     def initialize(io)
       @io = io

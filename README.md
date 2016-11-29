@@ -1,4 +1,4 @@
-# rcheck-analyzer [![Build Status](https://travis-ci.org/matsumoto-r/rcheck-analyzer.svg?branch=master)](https://travis-ci.org/matsumoto-r/rcheck-analyzer)
+# rcheck-analyzer [![Build Status](https://travis-ci.org/matsumoto-r/rcheck-analyzer.svg?branch=master)](https://travis-ci.org/matsumotory/rcheck-analyzer)
 
 rcheck-analyzer analyze the log via [mod_resource_checker](https://github.com/matsumoto-r/mod_resource_checker).
 
